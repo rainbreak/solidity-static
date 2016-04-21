@@ -54,6 +54,7 @@ WORKDIR /src/webthree-umbrella/build
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
           -DETHASHCL=0 -DTESTS=0 -DTOOLS=0 -DETH_STATIC=1 \
+          -DMINIUPNPC=0 \
 
           -DJSONCPP_LIBRARY=/src/deps/jsoncpp/src/lib_json/libjsoncpp.a \
           -DJSONCPP_INCLUDE_DIR=/src/deps/jsoncpp/include/ \
@@ -63,9 +64,6 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
 
           -DLEVELDB_LIBRARY=/src/deps/leveldb/out-static/libleveldb.a \
           -DLEVELDB_INCLUDE_DIR=/src/deps/leveldb/include/  \
-
-          -DMINIUPNPC_LIBRARY=/src/deps/miniupnp/miniupnpc/libminiupnpc.a \
-          -DMINIUPNPC_INCLUDE_DIR=/src/deps/miniupnp/miniupnpc/ \
 
           -DJSON_RPC_CPP_CLIENT_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-client.a \
           -DJSON_RPC_CPP_COMMON_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-common.a \
