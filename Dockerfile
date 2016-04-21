@@ -1,5 +1,9 @@
 FROM alpine:3.3
 
+# We can static link to these with -static if we want
+RUN apk --no-cache --update add --virtual dependencies \
+            libgcc \
+            libstdc++
 RUN apk --no-cache --update add --virtual build-dependencies \
             bash \
             cmake \
