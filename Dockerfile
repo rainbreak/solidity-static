@@ -51,6 +51,12 @@ RUN cd webthree-umbrella && \
 RUN mkdir -p /src/webthree-umbrella/build
 WORKDIR /src/webthree-umbrella/build
 
+RUN mkdir -p /src/boost/lib /src/boost/include/boost
+RUN cp /usr/lib/libboost*.a /src/boost/lib
+RUN cp -r /usr/include/boost/* /src/boost/include/boost/
+RUN apk add linux-headers
+RUN apk del boost-dev
+
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
           -DETHASHCL=0 -DTESTS=0 -DTOOLS=0 -DETH_STATIC=1 \
@@ -70,9 +76,31 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DJSON_RPC_CPP_SERVER_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-server.a \
           -DJSON_RPC_CPP_INCLUDE_DIR=/src/deps/libjson-rpc-cpp/src/jsonrpccpp/ \
 
-          -DCMAKE_CXX_FLAGS='-static -Wno-error' \
+          -DCMAKE_CXX_FLAGS='-Wno-error' \
+
           -DBoost_USE_STATIC_LIBS=1 \
           -DBoost_USE_STATIC_RUNTIME=1 \
+          -DBoost_FOUND=1 \
+
+          -DBoost_INCLUDE_DIR=/src/boost/include/ \
+          -DBoost_CHRONO_LIBRARY=/src/boost/lib/libboost_chrono.a \
+          -DBoost_CHRONO_LIBRARIES=/src/boost/lib/libboost_chrono.a \
+          -DBoost_DATE_TIME_LIBRARY=/src/boost/lib/libboost_date_time.a \
+          -DBoost_DATE_TIME_LIBRARIES=/src/boost/lib/libboost_date_time.a \
+          -DBoost_FILESYSTEM_LIBRARY=/src/boost/lib/libboost_filesystem.a \
+          -DBoost_FILESYSTEM_LIBRARIES=/src/boost/lib/libboost_filesystem.a \
+          -DBoost_PROGRAM_OPTIONS_LIBRARY=/src/boost/lib/libboost_program_options.a \
+          -DBoost_PROGRAM_OPTIONS_LIBRARIES=/src/boost/lib/libboost_program_options.a \
+          -DBoost_RANDOM_LIBRARY=/src/boost/lib/libboost_random.a \
+          -DBoost_RANDOM_LIBRARIES=/src/boost/lib/libboost_random.a \
+          -DBoost_REGEX_LIBRARY=/src/boost/lib/libboost_regex.a \
+          -DBoost_REGEX_LIBRARIES=/src/boost/lib/libboost_regex.a \
+          -DBoost_SYSTEM_LIBRARY=/src/boost/lib/libboost_system.a \
+          -DBoost_SYSTEM_LIBRARIES=/src/boost/lib/libboost_system.a \
+          -DBoost_THREAD_LIBRARY=/src/boost/lib/libboost_thread.a \
+          -DBoost_THREAD_LIBRARIES=/src/boost/lib/libboost_thread.a \
+          -DBoost_UNIT_TEST_FRAMEWORK_LIBRARY=/src/boost/lib/libboost_unit_test_framework.a \
+          -DBoost_UNIT_TEST_FRAMEWORK_LIBRARIES=/src/boost/lib/libboost_unit_test_framework.a \
           ..
 
 RUN sed -e 's/^#if defined(__linux__)/#if defined(__lolux__)/' -i ../libweb3core/libdevcore/Log.cpp
