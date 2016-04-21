@@ -1,8 +1,21 @@
-FROM alpine
+FROM alpine:3.3
 
-RUN apk update && apk add bash
-RUN apk add python bash git curl-dev make cmake gcc g++ perl scons
-RUN apk add boost-dev libmicrohttpd-dev gmp-dev
+RUN apk --no-cache --update add --virtual build-dependencies \
+            bash \
+            cmake \
+            curl-dev \
+            git \
+            gcc \
+            g++ \
+            linux-headers \
+            make \
+            perl \
+            python \
+            scons\
+
+            boost-dev \
+            gmp-dev\
+            libmicrohttpd-dev
 
 RUN mkdir -p /src/deps
 
@@ -13,6 +26,8 @@ RUN git clone https://github.com/mmoss/cryptopp.git && \
     cmake . && \
     make cryptopp
 
+## These aren't really necessary for solc, but can't build without them
+## as devcore links to them.
 RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
     cd jsoncpp && \
     cmake . && \
@@ -36,10 +51,6 @@ RUN git clone https://github.com/google/leveldb && \
     cd leveldb && \
     make
 
-RUN git clone https://github.com/miniupnp/miniupnp && \
-    cd miniupnp/miniupnpc && \
-    make upnpc-static
-
 WORKDIR /src
 
 RUN git clone https://github.com/ethereum/webthree-umbrella
@@ -51,10 +62,10 @@ RUN cd webthree-umbrella && \
 RUN mkdir -p /src/webthree-umbrella/build
 WORKDIR /src/webthree-umbrella/build
 
+# make sure that boost links statically
 RUN mkdir -p /src/boost/lib /src/boost/include/boost
-RUN cp /usr/lib/libboost*.a /src/boost/lib
-RUN cp -r /usr/include/boost/* /src/boost/include/boost/
-RUN apk add linux-headers
+RUN cp /usr/lib/libboost*.a /src/boost/lib/
+RUN cp -r /usr/include/boost /src/boost/include/
 RUN apk del boost-dev
 
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
@@ -109,4 +120,5 @@ RUN make solc
 
 RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
 
-CMD /usr/local/bin/solc
+RUN apk del build-dependencies
+RUN rm -rf /src
