@@ -2,18 +2,11 @@ FROM alpine
 
 RUN apk update && apk add bash
 RUN apk add python bash git curl-dev make cmake gcc g++ perl scons
-RUN apk add boost-dev libmicrohttpd-dev
+RUN apk add boost-dev libmicrohttpd-dev gmp-dev
 
-# ADD build_deps.sh .
+RUN mkdir -p /src/deps
 
-# RUN ./build_deps.sh
-RUN git clone https://github.com/ethereum/webthree-umbrella && \
-    cd webthree-umbrella && \
-    git submodule update --init --recursive
-
-RUN mkdir -p deps
-
-WORKDIR /deps
+WORKDIR /src/deps
 
 RUN git clone https://github.com/mmoss/cryptopp.git && \
     cd cryptopp && \
@@ -37,7 +30,7 @@ RUN git clone https://github.com/cinemast/libjson-rpc-cpp && \
           -DCOMPILE_EXAMPLES=NO                        \
           -DCOMPILE_STUBGEN=NO                         \
           .. && \
-    make 
+    make
 
 RUN git clone https://github.com/google/leveldb && \
     cd leveldb && \
@@ -47,37 +40,38 @@ RUN git clone https://github.com/miniupnp/miniupnp && \
     cd miniupnp/miniupnpc && \
     make upnpc-static
 
+WORKDIR /src
 
-WORKDIR /
+RUN git clone https://github.com/ethereum/webthree-umbrella
 
 RUN cd webthree-umbrella && \
-    git checkout release && \
-    git submodule update --force && \
-    mkdir -p /webthree-umbrella/build
+    git checkout release --force && \
+    git submodule update --init
 
-RUN apk add gmp-dev
+RUN mkdir -p /src/webthree-umbrella/build
+WORKDIR /src/webthree-umbrella/build
 
-WORKDIR /webthree-umbrella/build
-RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release -DEVMJIT=0 -DGUI=0 \
+RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
+          -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
           -DETHASHCL=0 -DTESTS=0 -DTOOLS=0 -DETH_STATIC=1 \
-          
-          -DJSONCPP_LIBRARY=/deps/jsoncpp/src/lib_json/libjsoncpp.a \
-          -DJSONCPP_INCLUDE_DIR=/deps/jsoncpp/include/ \
-          
-          -DCRYPTOPP_LIBRARY=/deps/cryptopp/target/lib/libcryptopp.a \
-          -DCRYPTOPP_INCLUDE_DIR=/deps/cryptopp/target/include/ \
-          
-          -DLEVELDB_LIBRARY=/deps/leveldb/out-static/libleveldb.a \ 
-          -DLEVELDB_INCLUDE_DIR=/deps/leveldb/include/  \
-          
-          -DMINIUPNPC_LIBRARY=/deps/miniupnp/miniupnpc/libminiupnpc.a \
-          -DMINIUPNPC_INCLUDE_DIR=/deps/miniupnp/miniupnpc/ \
-          
-          -DJSON_RPC_CPP_CLIENT_LIBRARY=/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-client.a \
-          -DJSON_RPC_CPP_COMMON_LIBRARY=/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-common.a \
-          -DJSON_RPC_CPP_SERVER_LIBRARY=/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-server.a \
-          -DJSON_RPC_CPP_INCLUDE_DIR=/deps/libjson-rpc-cpp/src/jsonrpccpp/ \
-          
+
+          -DJSONCPP_LIBRARY=/src/deps/jsoncpp/src/lib_json/libjsoncpp.a \
+          -DJSONCPP_INCLUDE_DIR=/src/deps/jsoncpp/include/ \
+
+          -DCRYPTOPP_LIBRARY=/src/deps/cryptopp/target/lib/libcryptopp.a \
+          -DCRYPTOPP_INCLUDE_DIR=/src/deps/cryptopp/target/include/ \
+
+          -DLEVELDB_LIBRARY=/src/deps/leveldb/out-static/libleveldb.a \
+          -DLEVELDB_INCLUDE_DIR=/src/deps/leveldb/include/  \
+
+          -DMINIUPNPC_LIBRARY=/src/deps/miniupnp/miniupnpc/libminiupnpc.a \
+          -DMINIUPNPC_INCLUDE_DIR=/src/deps/miniupnp/miniupnpc/ \
+
+          -DJSON_RPC_CPP_CLIENT_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-client.a \
+          -DJSON_RPC_CPP_COMMON_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-common.a \
+          -DJSON_RPC_CPP_SERVER_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-server.a \
+          -DJSON_RPC_CPP_INCLUDE_DIR=/src/deps/libjson-rpc-cpp/src/jsonrpccpp/ \
+
           -DCMAKE_CXX_FLAGS='-static -Wno-error' \
           -DBoost_USE_STATIC_LIBS=1 \
           -DBoost_USE_STATIC_RUNTIME=1 \
@@ -87,6 +81,6 @@ RUN sed -e 's/^#if defined(__linux__)/#if defined(__lolux__)/' -i ../libweb3core
 
 RUN make solc
 
-RUN cp /webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
+RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
 
 CMD /usr/local/bin/solc
