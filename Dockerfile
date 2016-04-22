@@ -27,8 +27,11 @@ WORKDIR /src/deps
 
 RUN git clone https://github.com/mmoss/cryptopp.git && \
     cd cryptopp && \
-    cmake . && \
-    make cryptopp
+    cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
+          -DCRYPTOPP_RUNTIME_TYPE=STATIC \
+          -DCRYPTOPP_BUILD_TESTS=FALSE \
+          . && \
+    make cryptlib
 
 ## These aren't really necessary for solc, but can't build without them
 ## as devcore links to them.
@@ -72,6 +75,8 @@ RUN cp /usr/lib/libboost*.a /src/boost/lib/
 RUN cp -r /usr/include/boost /src/boost/include/
 RUN apk del boost-dev
 
+RUN mv /src/deps/cryptopp/src /src/deps/cryptopp/cryptopp
+
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
           -DETHASHCL=0 -DTESTS=0 -DTOOLS=0 -DETH_STATIC=1 \
@@ -80,8 +85,8 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DJSONCPP_LIBRARY=/src/deps/jsoncpp/src/lib_json/libjsoncpp.a \
           -DJSONCPP_INCLUDE_DIR=/src/deps/jsoncpp/include/ \
 
-          -DCRYPTOPP_LIBRARY=/src/deps/cryptopp/target/lib/libcryptopp.a \
-          -DCRYPTOPP_INCLUDE_DIR=/src/deps/cryptopp/target/include/ \
+          -DCRYPTOPP_LIBRARY=/src/deps/cryptopp/cryptopp/libcryptlib.a \
+          -DCRYPTOPP_INCLUDE_DIR=/src/deps/cryptopp/ \
 
           -DLEVELDB_LIBRARY=/src/deps/leveldb/out-static/libleveldb.a \
           -DLEVELDB_INCLUDE_DIR=/src/deps/leveldb/include/  \
