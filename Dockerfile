@@ -140,8 +140,10 @@ RUN cp /src/webthree-umbrella/build/solidity/test/soltest /usr/local/bin/
 
 RUN soltest
 
-RUN ldd /usr/local/bin/solc
-RUN ldd /usr/local/bin/soltest
+RUN apk add file
+
+RUN file /usr/local/bin/solc
+RUN file /usr/local/bin/soltest
 
 RUN du -h /usr/local/bin/solc
 RUN du -h /usr/local/bin/soltest
