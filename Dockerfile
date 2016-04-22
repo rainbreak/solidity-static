@@ -25,8 +25,12 @@ RUN mkdir -p /src/deps
 
 WORKDIR /src/deps
 
-RUN git clone https://github.com/mmoss/cryptopp.git && \
-    cd cryptopp && \
+RUN git clone https://github.com/mmoss/cryptopp.git
+RUN git clone https://github.com/open-source-parsers/jsoncpp.git
+RUN git clone https://github.com/cinemast/libjson-rpc-cpp
+RUN git clone https://github.com/google/leveldb
+
+RUN cd cryptopp && \
     cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
           -DCRYPTOPP_RUNTIME_TYPE=STATIC \
           -DCRYPTOPP_BUILD_TESTS=FALSE \
@@ -39,14 +43,12 @@ RUN git clone https://github.com/mmoss/cryptopp.git && \
 
 ## These aren't really necessary for solc, but can't build without them
 ## as devcore links to them.
-RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
-    cd jsoncpp && \
+RUN cd jsoncpp && \
     cmake -DCMAKE_INSTALL_PREFIX=/src/built/ . && \
     make jsoncpp_lib_static && \
     make install
 
-RUN git clone https://github.com/cinemast/libjson-rpc-cpp && \
-    mkdir -p libjson-rpc-cpp/build && \
+RUN mkdir -p libjson-rpc-cpp/build && \
     sed -e 's/^#include <string>/#include <string.h>/' libjson-rpc-cpp/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp -i && \
     cd libjson-rpc-cpp/build && \
     cmake -DJSONCPP_LIBRARY=../../jsoncpp/src/lib_json/libjsoncpp.a \
@@ -60,8 +62,7 @@ RUN git clone https://github.com/cinemast/libjson-rpc-cpp && \
           .. && \
     make install
 
-RUN git clone https://github.com/google/leveldb && \
-    cd leveldb && \
+RUN cd leveldb && \
     make && \
     cp -rv include/leveldb /src/built/include/ &&
     cp -v out-static/libleveldb.a /src/built/lib/
