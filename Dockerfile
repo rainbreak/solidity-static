@@ -83,7 +83,7 @@ RUN apk del boost-dev
 
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
-          -DETHASHCL=0 -DTESTS=0 -DTOOLS=0 -DETH_STATIC=1 \
+          -DETHASHCL=0 -DTESTS=1 -DTOOLS=0 -DETH_STATIC=1 \
           -DMINIUPNPC=0 \
 
           -DJSONCPP_LIBRARY=/src/built/lib/libjsoncpp.a \
