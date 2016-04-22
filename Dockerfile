@@ -64,6 +64,12 @@ RUN git clone https://github.com/google/leveldb && \
     cp -rv include/leveldb /src/built/include/ &&
     cp -v out-static/libleveldb.a /src/built/lib/
 
+# make sure that boost links statically
+RUN mkdir -p /src/boost/lib /src/boost/include/boost
+RUN cp /usr/lib/libboost*.a /src/boost/lib/
+RUN cp -r /usr/include/boost /src/boost/include/
+RUN apk del boost-dev
+
 WORKDIR /src
 
 RUN git clone https://github.com/ethereum/webthree-umbrella
@@ -74,12 +80,6 @@ RUN cd webthree-umbrella && \
 
 RUN mkdir -p /src/webthree-umbrella/build
 WORKDIR /src/webthree-umbrella/build
-
-# make sure that boost links statically
-RUN mkdir -p /src/boost/lib /src/boost/include/boost
-RUN cp /usr/lib/libboost*.a /src/boost/lib/
-RUN cp -r /usr/include/boost /src/boost/include/
-RUN apk del boost-dev
 
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
@@ -129,7 +129,7 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
 
 RUN sed -e 's/^#if defined(__linux__)/#if defined(__lolux__)/' -i ../libweb3core/libdevcore/Log.cpp
 
-RUN make solc
+RUN make solidity
 
 RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
 
