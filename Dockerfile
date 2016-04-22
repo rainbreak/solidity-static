@@ -132,6 +132,12 @@ RUN sed -e 's/^#if defined(__linux__)/#if defined(__lolux__)/' -i ../libweb3core
 RUN make solidity
 
 RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
+RUN cp /src/webthree-umbrella/build/solidity/tests/soltest /usr/local/bin/
 
-RUN apk del build-dependencies
-RUN rm -rf /src
+RUN soltest
+
+RUN ldd /usr/local/bin/solc
+RUN ldd /usr/local/bin/soltest
+
+RUN du -h /usr/local/bin/solc
+RUN du -h /usr/local/bin/soltest
