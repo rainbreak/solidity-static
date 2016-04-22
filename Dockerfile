@@ -136,7 +136,7 @@ RUN sed -e 's/^#if defined(__linux__)/#if defined(__ignoreme__)/' -i ../libweb3c
 RUN make --jobs=2 solc soltest
 
 RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
-RUN cp /src/webthree-umbrella/build/solidity/tests/soltest /usr/local/bin/
+RUN cp /src/webthree-umbrella/build/solidity/test/soltest /usr/local/bin/
 
 RUN soltest
 
