@@ -129,7 +129,7 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
 
 RUN sed -e 's/^#if defined(__linux__)/#if defined(__lolux__)/' -i ../libweb3core/libdevcore/Log.cpp
 
-RUN make solidity
+RUN make --jobs=2 solidity
 
 RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
 RUN cp /src/webthree-umbrella/build/solidity/tests/soltest /usr/local/bin/
