@@ -126,7 +126,7 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DBoost_UNIT_TEST_FRAMEWORK_LIBRARIES=/src/boost/lib/libboost_unit_test_framework.a \
           ..
 
-RUN sed -e 's/^#if defined(__linux__)/#if defined(__lolux__)/' -i ../libweb3core/libdevcore/Log.cpp
+RUN sed -e 's/^#if defined(__linux__)/#if defined(__ignoreme__)/' -i ../libweb3core/libdevcore/Log.cpp
 
 RUN make --jobs=2 solidity
 
