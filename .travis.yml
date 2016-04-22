@@ -1,0 +1,13 @@
+sudo: required
+dist: trusty
+
+services:
+  - docker
+
+install:
+  - docker build --file=Dockerfile --tag=rainbeam/solidity-static .
+  - docker cp rainbeam/solidity-static:/usr/local/bin/solc .
+  - docker cp rainbeam/solidity-static:/usr/local/bin/soltest .
+
+script:
+  - ./soltest
