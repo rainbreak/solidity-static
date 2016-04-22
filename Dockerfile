@@ -30,6 +30,8 @@ RUN git clone https://github.com/open-source-parsers/jsoncpp.git
 RUN git clone https://github.com/cinemast/libjson-rpc-cpp
 RUN git clone https://github.com/google/leveldb
 
+RUN mkdir -p /src/built/include /src/built/lib
+
 RUN cd cryptopp && \
     cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
           -DCRYPTOPP_RUNTIME_TYPE=STATIC \
@@ -64,7 +66,7 @@ RUN mkdir -p libjson-rpc-cpp/build && \
 
 RUN cd leveldb && \
     make && \
-    cp -rv include/leveldb /src/built/include/ &&
+    cp -rv include/leveldb /src/built/include/ && \
     cp -v out-static/libleveldb.a /src/built/lib/
 
 # make sure that boost links statically
