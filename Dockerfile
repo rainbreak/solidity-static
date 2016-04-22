@@ -33,7 +33,9 @@ RUN git clone https://github.com/mmoss/cryptopp.git && \
           -DCMAKE_INSTALL_PREFIX=/src/built/ \
           . && \
     make cryptlib && \
-    make install
+    cp -r src /src/built/include/cryptopp && \
+    cp src/libcryptlib.a /src/built/lib/
+
 
 ## These aren't really necessary for solc, but can't build without them
 ## as devcore links to them.
