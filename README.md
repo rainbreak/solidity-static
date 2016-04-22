@@ -1,3 +1,5 @@
+<a href='https://travis-ci.org/rainbeam/solidity-static'> <img src='https://travis-ci.org/rainbeam/solidity-static.svg?branch=master'> </a>
+
 ## Static, portable builds of Solidity
 
 This is a script to produce a fully static build of `solc`, the
