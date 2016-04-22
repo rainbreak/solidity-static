@@ -30,15 +30,18 @@ RUN git clone https://github.com/mmoss/cryptopp.git && \
     cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
           -DCRYPTOPP_RUNTIME_TYPE=STATIC \
           -DCRYPTOPP_BUILD_TESTS=FALSE \
+          -DCMAKE_INSTALL_PREFIX=/src/built/ \
           . && \
-    make cryptlib
+    make cryptlib && \
+    make install
 
 ## These aren't really necessary for solc, but can't build without them
 ## as devcore links to them.
 RUN git clone https://github.com/open-source-parsers/jsoncpp.git && \
     cd jsoncpp && \
-    cmake . && \
-    make jsoncpp_lib_static
+    cmake -DCMAKE_INSTALL_PREFIX=/src/built/ . && \
+    make jsoncpp_lib_static && \
+    make install
 
 RUN git clone https://github.com/cinemast/libjson-rpc-cpp && \
     mkdir -p libjson-rpc-cpp/build && \
@@ -51,12 +54,15 @@ RUN git clone https://github.com/cinemast/libjson-rpc-cpp && \
           -DCOMPILE_TESTS=NO                           \
           -DCOMPILE_EXAMPLES=NO                        \
           -DCOMPILE_STUBGEN=NO                         \
+          -DCMAKE_INSTALL_PREFIX=/src/built/           \
           .. && \
-    make
+    make install
 
 RUN git clone https://github.com/google/leveldb && \
     cd leveldb && \
-    make
+    make && \
+    cp -rv include/leveldb /src/built/include/ &&
+    cp -v out-static/libleveldb.a /src/built/lib/
 
 WORKDIR /src
 
@@ -75,26 +81,24 @@ RUN cp /usr/lib/libboost*.a /src/boost/lib/
 RUN cp -r /usr/include/boost /src/boost/include/
 RUN apk del boost-dev
 
-RUN mv /src/deps/cryptopp/src /src/deps/cryptopp/cryptopp
-
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
           -DETHASHCL=0 -DTESTS=0 -DTOOLS=0 -DETH_STATIC=1 \
           -DMINIUPNPC=0 \
 
-          -DJSONCPP_LIBRARY=/src/deps/jsoncpp/src/lib_json/libjsoncpp.a \
-          -DJSONCPP_INCLUDE_DIR=/src/deps/jsoncpp/include/ \
+          -DJSONCPP_LIBRARY=/src/built/lib/libjsoncpp.a \
+          -DJSONCPP_INCLUDE_DIR=/src/built/include/ \
 
-          -DCRYPTOPP_LIBRARY=/src/deps/cryptopp/cryptopp/libcryptlib.a \
-          -DCRYPTOPP_INCLUDE_DIR=/src/deps/cryptopp/ \
+          -DCRYPTOPP_LIBRARY=/src/built/lib/libcryptlib.a \
+          -DCRYPTOPP_INCLUDE_DIR=/src/built/include \
 
-          -DLEVELDB_LIBRARY=/src/deps/leveldb/out-static/libleveldb.a \
-          -DLEVELDB_INCLUDE_DIR=/src/deps/leveldb/include/  \
+          -DLEVELDB_LIBRARY=/src/built/libleveldb.a \
+          -DLEVELDB_INCLUDE_DIR=/src/built/include/  \
 
-          -DJSON_RPC_CPP_CLIENT_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-client.a \
-          -DJSON_RPC_CPP_COMMON_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-common.a \
-          -DJSON_RPC_CPP_SERVER_LIBRARY=/src/deps/libjson-rpc-cpp/build/lib/libjsonrpccpp-server.a \
-          -DJSON_RPC_CPP_INCLUDE_DIR=/src/deps/libjson-rpc-cpp/src/jsonrpccpp/ \
+          -DJSON_RPC_CPP_CLIENT_LIBRARY=/src/built/lib/libjsonrpccpp-client.a \
+          -DJSON_RPC_CPP_COMMON_LIBRARY=/src/built/lib/libjsonrpccpp-common.a \
+          -DJSON_RPC_CPP_SERVER_LIBRARY=/src/built/lib/libjsonrpccpp-server.a \
+          -DJSON_RPC_CPP_INCLUDE_DIR=/src/built/include \
 
           -DCMAKE_CXX_FLAGS='-Wno-error' \
 
