@@ -98,7 +98,7 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DCRYPTOPP_LIBRARY=/src/built/lib/libcryptlib.a \
           -DCRYPTOPP_INCLUDE_DIR=/src/built/include \
 
-          -DLEVELDB_LIBRARY=/src/built/libleveldb.a \
+          -DLEVELDB_LIBRARY=/src/built/lib/libleveldb.a \
           -DLEVELDB_INCLUDE_DIR=/src/built/include/  \
 
           -DJSON_RPC_CPP_CLIENT_LIBRARY=/src/built/lib/libjsonrpccpp-client.a \
