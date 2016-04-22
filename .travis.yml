@@ -10,9 +10,11 @@ before_install:
   - docker pull centos:5
 
 install:
-  - docker build --file=Dockerfile --tag=rainbeam/solidity-static .
-  - docker cp rainbeam/solidity-static:/usr/local/bin/solc .
-  - docker cp rainbeam/solidity-static:/usr/local/bin/soltest .
+  - docker build --rm --file=Dockerfile --tag=rainbeam/solidity-static .
+  # create a container to copy files from (can't copy from an image)
+  - tmp_container=$(docker create rainbeam/solidity-static)
+  - docker cp ${tmp_container}:/usr/local/bin/solc .
+  - docker cp ${tmp_container}:/usr/local/bin/soltest .
 
 script:
   - ./soltest
