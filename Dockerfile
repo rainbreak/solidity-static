@@ -82,9 +82,10 @@ RUN mkdir -p /src/webthree-umbrella/build
 WORKDIR /src/webthree-umbrella/build
 
 RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
-          -DEVMJIT=0 -DGUI=0 -DFATDB=0 \
-          -DETHASHCL=0 -DTESTS=1 -DTOOLS=0 -DETH_STATIC=1 \
-          -DMINIUPNPC=0 \
+          -DEVMJIT=0 -DGUI=0 -DFATDB=0 -DETHASHCL=0 -DMINIUPNPC=0 \
+          -DTOOLS=0 -DTESTS=1 -DETH_STATIC=1 \
+
+          -DCMAKE_CXX_FLAGS='-Wno-error' \
 
           -DJSONCPP_LIBRARY=/src/built/lib/libjsoncpp.a \
           -DJSONCPP_INCLUDE_DIR=/src/built/include/ \
@@ -99,8 +100,6 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DJSON_RPC_CPP_COMMON_LIBRARY=/src/built/lib/libjsonrpccpp-common.a \
           -DJSON_RPC_CPP_SERVER_LIBRARY=/src/built/lib/libjsonrpccpp-server.a \
           -DJSON_RPC_CPP_INCLUDE_DIR=/src/built/include \
-
-          -DCMAKE_CXX_FLAGS='-Wno-error' \
 
           -DBoost_USE_STATIC_LIBS=1 \
           -DBoost_USE_STATIC_RUNTIME=1 \
