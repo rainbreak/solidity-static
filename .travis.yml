@@ -4,10 +4,17 @@ dist: trusty
 services:
   - docker
 
+before_install:
+  - docker pull busybox
+  - docker pull base/archlinux
+  - docker pull centos:5
+
 install:
   - docker build --file=Dockerfile --tag=rainbeam/solidity-static .
   - docker cp rainbeam/solidity-static:/usr/local/bin/solc .
   - docker cp rainbeam/solidity-static:/usr/local/bin/soltest .
 
 script:
-  - ./soltest
+  - docker run -v `pwd`:`pwd` -it busybox `pwd`/soltest
+  - docker run -v `pwd`:`pwd` -it base/archlinux `pwd`/soltest
+  - docker run -v `pwd`:`pwd` -it centos:5 `pwd`/soltest
