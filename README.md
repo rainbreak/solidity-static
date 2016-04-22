@@ -10,4 +10,10 @@ environment. Unlike glibc, musl is built with static linking in
 mind.
 
 The resulting binary should work on a wide variety of Linux
-platforms.
+platforms (tested here with CentOS, Arch, Alpine and Busybox).
+
+```bash
+$ file solc soltest
+solc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
+soltest: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
+```
