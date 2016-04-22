@@ -85,7 +85,7 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DEVMJIT=0 -DGUI=0 -DFATDB=0 -DETHASHCL=0 -DMINIUPNPC=0 \
           -DTOOLS=0 -DTESTS=1 -DETH_STATIC=1 \
 
-          -DCMAKE_CXX_FLAGS='-Wno-error' \
+          -DCMAKE_CXX_FLAGS='-Wno-error -static' \
 
           -DJSONCPP_LIBRARY=/src/built/lib/libjsoncpp.a \
           -DJSONCPP_INCLUDE_DIR=/src/built/include/ \
