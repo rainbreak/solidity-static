@@ -25,7 +25,7 @@ RUN mkdir -p /src/deps
 
 WORKDIR /src/deps
 
-RUN git clone https://github.com/mmoss/cryptopp.git
+RUN git clone https://github.com/weidai11/cryptopp.git
 RUN git clone https://github.com/open-source-parsers/jsoncpp.git
 RUN git clone https://github.com/cinemast/libjson-rpc-cpp
 RUN git clone https://github.com/google/leveldb
@@ -33,15 +33,8 @@ RUN git clone https://github.com/google/leveldb
 RUN mkdir -p /src/built/include /src/built/lib
 
 RUN cd cryptopp && \
-    cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
-          -DCRYPTOPP_RUNTIME_TYPE=STATIC \
-          -DCRYPTOPP_BUILD_TESTS=FALSE \
-          -DCMAKE_INSTALL_PREFIX=/src/built/ \
-          . && \
-    make cryptlib && \
-    cp -r src /src/built/include/cryptopp && \
-    cp src/libcryptlib.a /src/built/lib/
-
+    make static && \
+    PREFIX=/src/built/ make install
 
 ## These aren't really necessary for solc, but can't build without them
 ## as devcore links to them.
@@ -95,7 +88,7 @@ RUN cmake -DSOLIDITY=1 -DCMAKE_BUILD_TYPE=Release \
           -DJSONCPP_LIBRARY=/src/built/lib/libjsoncpp.a \
           -DJSONCPP_INCLUDE_DIR=/src/built/include/ \
 
-          -DCRYPTOPP_LIBRARY=/src/built/lib/libcryptlib.a \
+          -DCRYPTOPP_LIBRARY=/src/built/lib/libcryptopp.a \
           -DCRYPTOPP_INCLUDE_DIR=/src/built/include \
 
           -DLEVELDB_LIBRARY=/src/built/lib/libleveldb.a \
