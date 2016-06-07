@@ -98,8 +98,8 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release \
 
 RUN make --jobs=2 solc soltest
 
-RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
-RUN cp /src/webthree-umbrella/build/solidity/test/soltest /usr/local/bin/
+RUN install -s solidity/solc/solc /usr/local/bin
+RUN install -s solidity/test/soltest /usr/local/bin
 
 RUN soltest
 
