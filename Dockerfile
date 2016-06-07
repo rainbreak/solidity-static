@@ -71,12 +71,6 @@ RUN cd leveldb \
  && cp -rv include/leveldb ${PREFIX}/include/ \
  && cp -v out-static/libleveldb.a ${PREFIX}/lib/
 
-# make sure that boost links statically
-RUN mkdir -p /src/boost/lib /src/boost/include/boost
-RUN cp /usr/lib/libboost*.a /src/boost/lib/
-RUN cp -r /usr/include/boost /src/boost/include/
-RUN apk del boost-dev
-
 WORKDIR /src
 
 RUN git clone https://github.com/ethereum/webthree-umbrella
