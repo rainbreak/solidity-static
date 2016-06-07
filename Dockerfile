@@ -30,23 +30,25 @@ RUN git clone https://github.com/open-source-parsers/jsoncpp.git
 RUN git clone https://github.com/cinemast/libjson-rpc-cpp
 RUN git clone https://github.com/google/leveldb
 
-RUN mkdir -p /src/built/include /src/built/lib
+ENV PREFIX /src/built
+
+RUN mkdir -p ${PREFIX}/include ${PREFIX}/lib
 
 RUN cd cryptopp \
  && cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
           -DCRYPTOPP_RUNTIME_TYPE=STATIC \
           -DCRYPTOPP_BUILD_TESTS=FALSE \
-          -DCMAKE_INSTALL_PREFIX=/src/built/ \
+          -DCMAKE_INSTALL_PREFIX=${PREFIX}/ \
           . \
  && make cryptlib \
- && cp -r src /src/built/include/cryptopp \
- && cp src/libcryptlib.a /src/built/lib/
+ && cp -r src ${PREFIX}/include/cryptopp \
+ && cp src/libcryptlib.a ${PREFIX}/lib/
 
 
 ## These aren't really necessary for solc, but can't build without them
 ## as devcore links to them.
 RUN cd jsoncpp \
- && cmake -DCMAKE_INSTALL_PREFIX=/src/built/ . \
+ && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX}/ . \
  && make jsoncpp_lib_static \
  && make install
 
@@ -60,14 +62,14 @@ RUN mkdir -p libjson-rpc-cpp/build \
           -DCOMPILE_TESTS=NO                           \
           -DCOMPILE_EXAMPLES=NO                        \
           -DCOMPILE_STUBGEN=NO                         \
-          -DCMAKE_INSTALL_PREFIX=/src/built/           \
+          -DCMAKE_INSTALL_PREFIX=${PREFIX}/           \
           .. \
  && make install
 
 RUN cd leveldb \
  && make \
- && cp -rv include/leveldb /src/built/include/ \
- && cp -v out-static/libleveldb.a /src/built/lib/
+ && cp -rv include/leveldb ${PREFIX}/include/ \
+ && cp -v out-static/libleveldb.a ${PREFIX}/lib/
 
 # make sure that boost links statically
 RUN mkdir -p /src/boost/lib /src/boost/include/boost
@@ -92,7 +94,7 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release \
           -DTESTS=1 \
           -DSOLIDITY=1 \
           -DSTATIC_LINKING=1 \
-          -DCMAKE_PREFIX_PATH=/src/built \
+          -DCMAKE_PREFIX_PATH=${PREFIX} \
           ..
 
 RUN sed -e 's/^#if defined(__linux__)/#if defined(__ignoreme__)/' -i ../libweb3core/libdevcore/Log.cpp
