@@ -93,8 +93,6 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_PREFIX_PATH=${PREFIX} \
           ..
 
-RUN sed -e 's/^#if defined(__linux__)/#if defined(__ignoreme__)/' -i ../libweb3core/libdevcore/Log.cpp
-
 RUN make --jobs=2 solc soltest
 
 RUN cp /src/webthree-umbrella/build/solidity/solc/solc /usr/local/bin/
