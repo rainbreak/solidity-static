@@ -75,9 +75,11 @@ WORKDIR /src
 
 RUN git clone https://github.com/ethereum/webthree-umbrella
 
+ENV buildbranch=release
+
 RUN cd webthree-umbrella \
- && git checkout release --force \
- && git submodule update --init
+ && git checkout ${buildbranch} --force \
+ && git submodule update --init --recursive
 
 RUN mkdir -p /src/webthree-umbrella/build
 WORKDIR /src/webthree-umbrella/build
