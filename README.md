@@ -17,6 +17,12 @@ platforms (tested here with CentOS, Arch, Alpine and Busybox).
 
 ```bash
 $ file solc soltest
-solc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
-soltest: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
+solc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, stripped
+soltest: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, stripped
+```
+
+```bash
+$ du -h solc soltest
+3.0M    solc
+9.4M    soltest
 ```
