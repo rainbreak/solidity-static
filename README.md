@@ -26,3 +26,5 @@ $ du -h solc soltest
 3.0M    solc
 9.4M    soltest
 ```
+
+Latest solidity build: 6610add
