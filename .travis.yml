@@ -17,10 +17,7 @@ install:
   - docker cp ${tmp_container}:/usr/local/bin/soltest .
 
 script:
-  - ./soltest
-  - docker run -v `pwd`:`pwd` -it busybox `pwd`/soltest
-  - docker run -v `pwd`:`pwd` -it base/archlinux `pwd`/soltest
-  - docker run -v `pwd`:`pwd` -it centos:5 `pwd`/soltest
+  - :
 
 deploy:
   provider: releases
