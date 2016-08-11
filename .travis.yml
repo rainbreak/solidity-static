@@ -4,11 +4,6 @@ dist: trusty
 services:
   - docker
 
-before_install:
-  - docker pull busybox
-  - docker pull base/archlinux
-  - docker pull centos:5
-
 install:
   - docker build --rm --file=Dockerfile --tag=rainbeam/solidity-static .
   # create a container to copy files from (can't copy from an image)
