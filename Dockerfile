@@ -18,6 +18,7 @@ RUN cd jsoncpp \
 
 WORKDIR /src/solidity/build
 
+RUN git checkout v0.3.6
 RUN cmake -DCMAKE_BUILD_TYPE=Release \
           -DTESTS=1 \
           -DSTATIC_LINKING=1 \
