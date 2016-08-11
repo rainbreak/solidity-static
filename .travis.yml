@@ -17,7 +17,7 @@ install:
   - docker cp ${tmp_container}:/usr/local/bin/soltest .
 
 script:
-  - :
+  - echo "no script"
 
 deploy:
   provider: releases
