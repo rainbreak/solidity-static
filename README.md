@@ -12,8 +12,7 @@ mind.
 [musl]: http://www.musl-libc.org/
 [alpine]: http://www.alpinelinux.org/
 
-The resulting binary should work on a wide variety of Linux
-platforms (tested here with CentOS, Arch, Alpine and Busybox).
+The resulting binary should work on any Linux platform.
 
 ```bash
 $ file solc soltest
@@ -24,5 +23,5 @@ soltest: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked,
 ```bash
 $ du -h solc soltest
 3.0M    solc
-9.4M    soltest
+5.8M    soltest
 ```
