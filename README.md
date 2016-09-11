@@ -1,4 +1,5 @@
 <a href='https://travis-ci.org/rainbeam/solidity-static'> <img src='https://travis-ci.org/rainbeam/solidity-static.svg?branch=master'> </a>
+<a href='https://github.com/rainbeam/solidity-static/releases/latest'>_<img src='https://img.shields.io/github/release/rainbeam/solidity-static.svg'>_</a>
 
 ## Static, portable builds of Solidity
 
