@@ -18,7 +18,7 @@ RUN cd jsoncpp \
 
 WORKDIR /src/solidity/build
 
-RUN git checkout v0.4.3
+RUN git checkout v0.4.4
 
 # don't use nightly versioning for releases
 RUN echo -n > ../prerelease.txt
