@@ -7,14 +7,7 @@ RUN sed -i -E -e 's/include <sys\/poll.h>/include <poll.h>/' /usr/include/boost/
 
 WORKDIR /src
 
-RUN git clone https://github.com/open-source-parsers/jsoncpp.git
-RUN git clone https://github.com/ethereum/solidity
-
-# alpine has jsoncpp-dev, but it doesn't provide static libs
-RUN cd jsoncpp \
- && cmake -DBUILD_STATIC_LIBS=ON -DBUILD_SHARED_LIBS=OFF . \
- && make jsoncpp_lib_static \
- && make install
+RUN git clone --recursive https://github.com/ethereum/solidity
 
 WORKDIR /src/solidity/build
 
