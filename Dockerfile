@@ -1,6 +1,6 @@
 FROM alpine
 
-RUN apk --no-cache --update add build-base cmake boost-dev git file
+RUN apk --no-cache --update add build-base cmake boost-dev git file perl
 
 # stop boost complaining about sys/poll.h
 RUN sed -i -E -e 's/include <sys\/poll.h>/include <poll.h>/' /usr/include/boost/asio/detail/socket_types.hpp
