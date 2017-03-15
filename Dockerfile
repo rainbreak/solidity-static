@@ -11,7 +11,7 @@ RUN git clone --recursive https://github.com/ethereum/solidity
 
 WORKDIR /src/solidity/build
 
-RUN git checkout v0.4.9
+RUN git checkout v0.4.10
 
 # don't use nightly versioning for releases
 RUN echo -n > ../prerelease.txt
