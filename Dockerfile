@@ -21,10 +21,11 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release \
           -DSTATIC_LINKING=1 \
           ..
 
-RUN make --jobs=2 solc soltest
+RUN make --jobs=2 solc soltest lllc
 
 RUN install -s solc/solc /usr/local/bin
 RUN install -s test/soltest /usr/local/bin
+RUN install -s lllc/lllc /usr/local/bin
 
-RUN file /usr/local/bin/solc /usr/local/bin/soltest
-RUN du -h /usr/local/bin/solc /usr/local/bin/soltest
+RUN file /usr/local/bin/solc /usr/local/bin/soltest /usr/local/bin/lllc
+RUN du -h /usr/local/bin/solc /usr/local/bin/soltest /usr/local/bin/lllc
