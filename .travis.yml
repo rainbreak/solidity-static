@@ -10,6 +10,7 @@ install:
   - tmp_container=$(docker create rainbeam/solidity-static sh)
   - docker cp ${tmp_container}:/usr/local/bin/solc .
   - docker cp ${tmp_container}:/usr/local/bin/soltest .
+  - docker cp ${tmp_container}:/usr/local/bin/lllc .
 
 script:
   - echo "no script"
@@ -21,7 +22,7 @@ deploy:
   file:
     - solc
     - soltest
-    - lll
+    - lllc
   skip_cleanup: true
   on:
     tags: true
